@@ -1,0 +1,9 @@
+.black_squar{
+    margin: 5px auto;
+    padding: 20px;
+    padding-left: 35px;
+    background-color: black;
+    max-height: 400px;
+    color: white;
+    overflow-y: auto;
+}
