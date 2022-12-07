@@ -14,6 +14,18 @@
         <title><?=$title;?></title>
     </head>
     <body class="d-flex flex-column h-100">
+        <!--Сообщения об ошибках-->
+        <!-- Alert Notes -->
+        <?php if(!empty($_SESSION['alert'])):?>
+            <section class="alert-notis">
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <?= Class_Alert_Message::widget($_SESSION['alert']['text'], $_SESSION['alert']['type']);?>
+                    </div>
+                </div>
+            </section>
+        <?php endif;?>
+        <!-- ./End Alert Notes -->
 
         <header>
             <!-- Fixed navbar -->
@@ -35,29 +47,19 @@
         </header>
 
         <!-- Begin page content -->
-        <main class="col-12 ms-sm-auto px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2"><?=$title;?></h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                <?php
-                    if(isset($buttons) AND !empty($buttons)){
-                        foreach ($buttons as $button){
-                            echo $button;
-                        }
-                    }
-                ?>
-                </div>
-            </div>
-            <div class="container">
-                <?=$content;?>
-            </div>
-        </main>
+        <!-- Вставляем файл контента -->
+        <?php if(isset($content_view) AND !empty($content_view)) {include './apps/views/'.$content_view;} ?>
+
 
         <footer class="footer mt-auto py-3 bg-light">
             <div class="container">
                 <span class="text-muted">Place sticky footer content here.</span>
             </div>
         </footer>
+
+        <!-- Clear alert message -->
+        <?php Class_Alert_Message::clear();?>
+        <!-- ./End Clear alert message -->
 
         <!-- Дополнительный JavaScript; выберите один из двух! -->
 

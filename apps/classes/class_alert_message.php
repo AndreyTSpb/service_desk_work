@@ -18,11 +18,11 @@ class Class_Alert_Message
         switch ($type){
             case 'error':
                 ob_start();
-                include "./app/tp/error.php";
+                include "./apps/views/widget/error.php";
                 return ob_get_clean();
             case 'success':
                 ob_start();
-                include "./app/tp/succes.php";
+                include "./apps/views/widget/succes.php";
                 return ob_get_clean();
         }
     }

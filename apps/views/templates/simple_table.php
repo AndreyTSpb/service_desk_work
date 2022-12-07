@@ -9,8 +9,8 @@
         </thead>
         <tbody>
             <?php foreach ($body as $tr):?>
-                <tr>
-                    <?php foreach ($tr as $td):?>
+                <tr class="<?=$tr['class_tr']?>">
+                    <?php foreach ($tr['tds'] as $td):?>
                         <td><?=$td;?></td>
                     <?php endforeach;?>
                 </tr>
