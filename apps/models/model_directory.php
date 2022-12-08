@@ -26,7 +26,7 @@ class Model_Directory extends Model
         return Class_Create_Simple_Table::html($header, $body);
     }
 
-    function bodyAllUsers(){
+    private function bodyAllUsers(){
         $obj = new Model_Users(
             ['where' => 'del = 0',
                 "order" => 'name ASC'
@@ -131,7 +131,8 @@ class Model_Directory extends Model
         $obj->email = $post['email'];
         $obj->phone = (int)$post['phone'];
         $obj->roles_id = (int)$post['role'];
-        if(!$obj->save()) {
+        $r = $obj->save();
+        if(!$r) {
             Class_Alert_Message::error('Не сохранено в БД');
             return false;
         }
@@ -187,5 +188,49 @@ class Model_Directory extends Model
         }
         Class_Alert_Message::succes('Пароль пользователя '.$post['userName'].' обновлен!');
         return true;
+    }
+
+    function getAllKlass(){
+        /**
+         * Все заявки пользователя
+         */
+        $header = array(
+            '#',
+            'Название',
+            'Описание',
+            'Активна'
+        );
+        $body = $this->bodyAllKlass();
+        return Class_Create_Simple_Table::html($header, $body);
+    }
+
+    private function bodyAllKlass(){
+        $obj = new Model_Klass_Truble(["order" => 'name ASC']);
+        if(!$obj->num_row){
+            return array(
+                0 => array(
+                    'class_tr' => 'table-light',
+                    'tds' => array(
+                        '1',
+                        'Нет данных',
+                        'Нет данных',
+                        'Нет данных',
+                    )
+                )
+            );
+        }
+        $arr = array();
+        $rows = $obj->getAllRows();
+        foreach ($rows as $row){
+            $arr[$row['id']]['class_tr'] = '';
+            $arr[$row['id']]['tds'] = array(
+                $row['id'],
+                "<a href='".DOCUMENT_ROOT."/".$this->url."/edit_user?id=".$row['id']."'>".$row['name']."</a>",
+                Class_Get_Name_Role::name($row['name']),
+                $row['del'],
+            );
+        }
+
+        return $arr;
     }
 }

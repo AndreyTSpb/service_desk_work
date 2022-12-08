@@ -73,7 +73,7 @@ Class CreateBD{
             `pass` VARCHAR(45) NULL,
             `del` INT NULL DEFAULT 0,
             `roles_id` INT NOT NULL,
-            `pc_name` INT NOT NULL,
+            `pc_name` VARCHAR(45) NULL,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `id_users_UNIQUE` (`id` ASC),
             INDEX `fk_users_roles1_idx` (`roles_id` ASC),

@@ -34,6 +34,22 @@ class Controller_Directory extends Controller
 
     public function action_new_user(){
         if($this->model->role == 2){
+            //var_dump($_POST);
+            //exit;
+            /**
+             * array(10) { 
+             *  ["id"]=> string(0) "" 
+             *  ["userName"]=> string(5) "user1" 
+             *  ["pcName"]=> string(9) "test-pc-1" 
+             *  ["email"]=> string(18) "atynyany@gmail.com" 
+             *  ["phone"]=> string(9) "666666666" 
+             *  ["role"]=> string(1) "1" 
+             *  ["type"]=> string(0) "" 
+             *  ["pass"]=> string(1) "1" 
+             *  ["pass1"]=> string(1) "1" 
+             *  ["save"]=> string(0) "" 
+             * }
+             */
             if(isset($_POST['save'])){
                 if($this->model->saveUser($_POST)){
                     header('Location: '.DOCUMENT_ROOT.'/directory');
@@ -105,7 +121,7 @@ class Controller_Directory extends Controller
             $data['title']          = "Справочник классов проблем";
             $data['view_menu_file'] = 'super_admin_menu.php';
             $data['left_menu']      = $this->model->leftMenu('klass');
-            $data['content']        = $this->model->formAddUser();
+            $data['content']        = $this->model->getAllKlass();
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
