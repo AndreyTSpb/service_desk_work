@@ -233,4 +233,96 @@ class Model_Directory extends Model
 
         return $arr;
     }
+
+    /**
+     *  Вызов кнопки с молкой
+     */
+    public function getModalBtn($id_modal, $template, $data)
+    {
+        $obj = new Class_Widget_Modal($id_modal, $template, $data);
+        return $obj->btn.$obj->modal;
+    }
+
+    /**
+     * Сохранение нового класса проблемы
+     */
+    public function saveKlassTruble($post)
+    {
+        $obj = new Model_Klass_Truble();
+        $obj->name = $post['name'];
+        if($obj->save()) return true;
+        return false;
+    }
+
+    public function updateKlassTruble($post)
+    {
+        $obj = new Model_Klass_Truble(['where'=>'id = '.$post['id']]);
+        if(!$obj->fetchOne()) return false;
+        $obj->name = $post['name'];
+        if($obj->update()) return true;
+        return false;
+    }
+
+    public function getAllTypeTrable(){
+        $header = array(
+            '#',
+            'Название',
+            'Описание',
+            'Активна'
+        );
+        $body = $this->bodyAllTypeTruble();
+        return Class_Create_Simple_Table::html($header, $body);
+    }
+
+    private function bodyAllTypeTruble()
+    {
+        $obj = new Model_Type_Truble(["order" => 'name ASC']);
+        if(!$obj->num_row){
+            return array(
+                0 => array(
+                    'class_tr' => 'table-light',
+                    'tds' => array(
+                        '1',
+                        'Нет данных',
+                        'Нет данных',
+                        'Нет данных',
+                    )
+                )
+            );
+        }
+        $arr = array();
+        $rows = $obj->getAllRows();
+        foreach ($rows as $row){
+            $arr[$row['id']]['class_tr'] = '';
+            $arr[$row['id']]['tds'] = array(
+                $row['id'],
+                "<a href='".DOCUMENT_ROOT."/".$this->url."/edit_user?id=".$row['id']."'>".$row['name']."</a>",
+                Class_Get_Name_Role::name($row['name']),
+                $row['del'],
+            );
+        }
+
+        return $arr;
+    }
+
+        /**
+     * Сохранение нового класса проблемы
+     */
+    public function saveTypeTruble($post)
+    {
+        $obj = new Model_Type_Truble();
+        $obj->name = $post['name'];
+        if($obj->save()) return true;
+        return false;
+    }
+
+    public function updateTypeTruble($post)
+    {
+        $obj = new Model_Type_Truble(['where'=>'id = '.$post['id']]);
+        if(!$obj->fetchOne()) return false;
+        $obj->name = $post['name'];
+        if($obj->update()) return true;
+        return false;
+    }
+
 }

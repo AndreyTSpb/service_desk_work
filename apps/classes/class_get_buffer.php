@@ -7,6 +7,11 @@
 
 class Class_Get_Buffer
 {
+    /**
+     * Добавляем данные в шаблон и возвращаем буфер
+     * $data - данные для заполнения шаблона
+     * $path - путь к шаблону
+     */
     static function returnBuffer($data, $path){
         if(empty($data)){
             return '<div class="alert alert-danger" role="alert">

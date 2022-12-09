@@ -91,6 +91,7 @@ Class CreateBD{
         $sql2 = "CREATE TABLE IF NOT EXISTS `servicedesk`.`klass_truble` (
             `id` INT NOT NULL AUTO_INCREMENT,
             `name` VARCHAR(255) NULL,
+            `note` TEXT NULL,
             `del` INT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `id_klass_truble_UNIQUE` (`id` ASC) )
@@ -103,6 +104,8 @@ Class CreateBD{
         $sql = "CREATE TABLE IF NOT EXISTS `servicedesk`.`type_truble` (
             `id` INT NOT NULL AUTO_INCREMENT,
             `name` VARCHAR(255) NULL,
+            `klass_type_id` INT NULL DEFAULT 0,
+            `note` TEXT NULL,
             `del` INT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `id_type_truble_UNIQUE` (`id` ASC) )

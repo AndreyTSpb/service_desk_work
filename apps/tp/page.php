@@ -41,6 +41,11 @@
                             <input id="search-page" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
                             <button id="btn-search" class="btn btn-outline-success" type="submit">Поиск</button>
                         </form>
+                        <ul class="navbar-nav px-3">
+                            <li class="nav-item text-nowrap">
+                                <a class="nav-link" href="<?=DOCUMENT_ROOT?>/logout">Выйти</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </nav>
