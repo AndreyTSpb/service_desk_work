@@ -198,7 +198,7 @@ class Controller_Directory extends Controller
             $data['buttons']        = array(
                 $this->model->getModalBtn(
                     'new_klass', 
-                    'forms/add_klass.php', 
+                    'forms/add_type.php', 
                     array(
                         'nameBtn'    => 'Добавить',
                         'titleModal' => 'Новый тип проблемы',

@@ -297,8 +297,8 @@ class Model_Directory extends Model
             $arr[$row['id']]['tds'] = array(
                 $row['id'],
                 "<a href='".DOCUMENT_ROOT."/".$this->url."/edit_user?id=".$row['id']."'>".$row['name']."</a>",
-                Class_Get_Name_Role::name($row['name']),
-                $row['del'],
+                Class_Get_Name_Klass_Truble::name($row['klass_truble_id']),
+                ($row['del'] == 0)?'<input class="form-check-input" type="checkbox" value="1" checked>':'<input class="form-check-input" type="checkbox" value="1">',
             );
         }
 
@@ -312,6 +312,8 @@ class Model_Directory extends Model
     {
         $obj = new Model_Type_Truble();
         $obj->name = $post['name'];
+        $obj->klass_truble_id = $post['klassTrableId'];
+
         if($obj->save()) return true;
         return false;
     }
