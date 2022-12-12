@@ -10,6 +10,7 @@ class Model_Users extends Mysql
     public $roles_id;
     public $del;
     public $pc_name;
+    public $hash;
 
     public function fieldsTable() {
         return array(
@@ -21,6 +22,7 @@ class Model_Users extends Mysql
             'roles_id' => 'roles_id',
             'del' => 'del',
             'pc_name' => 'pc_name',
+            'hash' => 'hash'
         );
     }
 }

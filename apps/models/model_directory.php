@@ -1,6 +1,4 @@
 <?php
-
-
 class Model_Directory extends Model
 {
     public $url;

@@ -26,15 +26,16 @@
             </section>
         <?php endif;?>
         <!-- ./End Alert Notes -->
-
+        <?php if($_SERVER['REQUEST_URI'] !== '/login'):?>
         <header>
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#"><?=$nameCompany?></a>
+                    <a class="navbar-brand" href="#"><?=(isset($nameCompany) AND !empty($nameCompany))?'$nameCompany':'';?></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                    
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <?php include ('./apps/views/menu/'.$view_menu_file);?>
                         <form class="d-flex">
@@ -50,15 +51,15 @@
                 </div>
             </nav>
         </header>
-
+        <?php endif;?>
         <!-- Begin page content -->
         <!-- Вставляем файл контента -->
         <?php if(isset($content_view) AND !empty($content_view)) {include './apps/views/'.$content_view;} ?>
 
 
-        <footer class="footer mt-auto py-3 bg-light">
+        <footer class="footer mt-auto py-3 ">
             <div class="container">
-                <span class="text-muted">Place sticky footer content here.</span>
+                <span class="text-muted"><p class="mt-5 mb-3 text-muted">© 2022–<?=date('Y', time())?></p></span>
             </div>
         </footer>
 

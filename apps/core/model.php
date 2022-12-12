@@ -16,9 +16,9 @@ class Model
     public $nameCompany;
     public $labelCompany;
 
-    function __construct()
+    public function __construct()
     {
-        $this->role = 2;
+        //$this->role = 2;
         $this->nameCompany = 'nameCompany';
         $this->labelCompany = 'bootstrap-logo.svg';
     }

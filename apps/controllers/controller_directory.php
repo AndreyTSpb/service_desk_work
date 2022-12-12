@@ -26,7 +26,7 @@ class Controller_Directory extends Controller
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }
@@ -70,7 +70,7 @@ class Controller_Directory extends Controller
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }
@@ -106,7 +106,7 @@ class Controller_Directory extends Controller
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }
@@ -140,7 +140,7 @@ class Controller_Directory extends Controller
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }
@@ -213,7 +213,7 @@ class Controller_Directory extends Controller
             $this->view->generate('directory_view.php', 'page.php', $data);
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }
@@ -233,7 +233,7 @@ class Controller_Directory extends Controller
             header('Location: '.DOCUMENT_ROOT.DS.$this->model->url.'/type');
             exit();
         }else{
-            Class_Alert_Error::warning('Отказано в доступе');
+            Class_Alert_Message::error('Отказано в доступе');
             header('Location: '.DOCUMENT_ROOT.'/login');
             exit();
         }

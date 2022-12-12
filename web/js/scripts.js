@@ -135,4 +135,54 @@
         });
     }
 
+    /**
+     * Для селектора класса проблемы, отображать тип
+     */
+    let orderForm = document.querySelector('#orderForm');
+    if(orderForm != null){
+        let inputKlass = orderForm.querySelector('#klass');
+        /**
+         *Слушатель на измнение в селекторе класса проблемы
+         */
+        inputKlass.addEventListener('change', ()=>{
+            let idKlass = inputKlass.value,
+                fullUrl  = document.location.href;
+            //window.location.href = 'URL2';
+            /**
+             * Отризаем все что после ? у адреса
+             */
+            //let url = fullUrl.split('?')[0];
+            let arrUrl = fullUrl.split('/');
+            /* 0 2 3 */
+
+            let formData = new FormData();
+            formData.append('selectType', 'ййй'); // <<<
+            formData.append('id', idKlass); // <<<
+
+            // 1. Создаём новый объект XMLHttpRequest
+            let xhr = new XMLHttpRequest();
+
+            // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+            xhr.open('POST', arrUrl[0]+'//'+arrUrl[2]+'/order/ajax_get_list_type_truble', false);
+
+            // 3. Отсылаем запрос
+            xhr.send(formData);
+
+            // 4. Если код ответа сервера не 200, то это ошибка
+            if (xhr.status != 200) {
+                // обработать ошибку
+                console.log( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+            } else {
+                // вывести результат
+                console.log( xhr.responseText ); // responseText -- текст ответа.
+                let inputType = orderForm.querySelector('#type');
+                if(inputType != null){
+                    inputType.innerHTML = xhr.responseText;
+                } 
+            }
+        });
+
+    }
+
+
 })();

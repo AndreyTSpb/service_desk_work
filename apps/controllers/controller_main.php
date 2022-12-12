@@ -12,6 +12,9 @@ Class Controller_Main extends Controller
     {
         parent::__construct();
         $this->model = new Model_Main();
+        $this->model->id_user = $this->id_user;
+        $this->model->url = '';
+        $this->model->role = $this->role;
     }
 
     function action_index()
@@ -19,15 +22,17 @@ Class Controller_Main extends Controller
 
         $data['nameCompany'] = $this->model->nameCompany;
         $data['labelCompany'] = $this->model->labelCompany;
-        if($this->model->role == 1){
+
+        if($this->model->role == 2){
             $data['title']      = "Мои заявки";
             $data['view_menu_file'] = 'admin_menu.php';
+            $data['content']    = $this->model->get_tech_user_data();
             $data['buttons']     = array(
                 $this->model->btn_new_order(),
                 $this->model->btn_select_admin(),
                 $this->model->btn_select_date()
             );
-        }elseif ($this->model->role == 2){
+        }elseif ($this->model->role == 3){
             $data['title']      = "Все заявки (СуперАдмин)";
             $data['view_menu_file'] = 'super_admin_menu.php';
             $data['buttons']     = array(

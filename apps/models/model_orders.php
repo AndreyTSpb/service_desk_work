@@ -14,6 +14,7 @@ class Model_Orders extends Mysql
     public $klass_truble_id;
     public $type_truble_id;
     public $users_id;
+    public $connect_method;
 
     public function fieldsTable()
     {
@@ -28,7 +29,8 @@ class Model_Orders extends Mysql
             'name_comp'         => 'name_comp',
             'klass_truble_id'   => 'klass_truble_id',
             'type_truble_id'    => 'type_truble_id',
-            'users_id'          => 'users_id'
+            'users_id'          => 'users_id',
+            'connect_method'    => 'connect_method'
         );
     }
 }

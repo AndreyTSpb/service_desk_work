@@ -25,10 +25,10 @@ class Model_Main extends Model
      * @return array
      */
     function get_body_user_order(){
-        $obj = new Model_Orders(
-            ['where' => 'users_id = '.(int)$this->id_user,
-                "order" => 'dt DESC'
-            ]);
+        $sql = ['where' => 'users_id = '.(int)$this->id_user,
+                    "order" => 'dt DESC'
+               ];
+        $obj = new Model_Orders($sql);
         if(!$obj->num_row){
             return array(
                 0 => array(
@@ -55,15 +55,27 @@ class Model_Main extends Model
          *  table-light - новая
          */
         foreach ($rows as $row){
+            switch($row['status']){
+                case 0:
+                    $linkOrder = DOCUMENT_ROOT.'/edit_order?id='.$row['id'];
+                    break;
+                case 1:
+                    $linkOrder = DOCUMENT_ROOT.DS.'/edit_order?id='.$row['id'];
+                    break;
+                case 2:
+                    $linkOrder = DOCUMENT_ROOT.DS.'/edit_order?id='.$row['id'];
+                    break;
+            }
+
             $arr[$row['id']]['class_tr'] = $this->statusOrder($row['status'], $row['dt']);
             $arr[$row['id']]['tds'] = array(
                 $row['id'],
-                'Класс',
-                'Тип',
-                'Описание',
+                Class_Get_Name_Klass_Truble::name($row['klass_truble_id']),
+                Class_Get_Name_Type_Truble::name($row['type_truble_id']),
+                '<a href="'.$linkOrder.'">'.mb_substr($row['text'], 0, 80).'...'.'</a>',
                 'Ответственный',
-                'Дата создания',
-                'Дата завершения'
+                $row['dt'],
+                $row['dt_ext']
             );
         }
 
@@ -211,5 +223,92 @@ class Model_Main extends Model
                 break;
         }
         return $status;
+    }
+
+    public function get_tech_user_data()
+    {
+        /**
+         * Все заявки пользователя
+         */
+        $header = array(
+            '#',
+            'Класс',
+            'Тип',
+            'Описание',
+            'Ответственный',
+            'Дата создания',
+            'Дата завершения',
+            'действия'
+        );
+        $body = $this->get_body_tech_user_order();
+        return Class_Create_Simple_Table::html($header, $body);
+    }
+    private function get_body_tech_user_order($id_user = false){
+        if(!$id_user){
+            $id_user = (int)$this->id_user;
+        }
+
+        $sql = [
+            'where' => '(id IN (SELECT orders_id FROM order_answers WHERE users_id = '.$id_user.') AND status = 1) OR status = 0',
+            'order' => 'dt DESC'
+        ];
+
+        $obj = new Model_Orders($sql);
+        if(!$obj->num_row){
+        return array(
+            0 => array(
+                'class_tr' => 'table-light',
+                'tds' => array(
+                    '1',
+                    'Нет данных',
+                    'Нет данных',
+                    'Нет данных',
+                    'Нет данных',
+                    'Нет данных',
+                    'Нет данных',
+                    ''
+                )
+            )
+        );
+        }
+        $arr = array();
+        $rows = $obj->getAllRows();
+        /**
+        * $arr[$row['id']]['class_tr'] - стили для раскраски строк в таблице
+        *  table-success - выполнено,
+        *  table-danger - просрочено,
+        *  table-warning - принято,
+        *  table-light - новая
+        */
+        foreach ($rows as $row){
+            switch($row['status']){
+                case 0:
+                    $linkOrder = DOCUMENT_ROOT.DS.'order/work_order?id='.$row['id'];
+                    $appOrderBtn = '<a href= "'.$linkOrder.'">Принять</a>';
+                    break;
+                case 1:
+                    $linkOrder = DOCUMENT_ROOT.DS.'order/work_order?id='.$row['id'];
+                    $appOrderBtn = '<a href= "'.$linkOrder.'">Редактировать</a>';
+                    break;
+                case 2:
+                    $linkOrder = DOCUMENT_ROOT.DS.'/view_order?id='.$row['id'];
+                    $appOrderBtn = $appOrderBtn = '<a href= "'.$linkOrder.'">Просмотреть</a>';
+                    break;
+            }
+
+            $arr[$row['id']]['class_tr'] = $this->statusOrder($row['status'], $row['dt']);
+            $arr[$row['id']]['tds'] = array(
+                $row['id'],
+                Class_Get_Name_Klass_Truble::name($row['klass_truble_id']),
+                Class_Get_Name_Type_Truble::name($row['type_truble_id']),
+                '<a href="'.$linkOrder.'">'.mb_substr($row['text'], 0, 80).'...'.'</a>',
+                'Ответственный',
+                $row['dt'],
+                $row['dt_ext'],
+                $appOrderBtn
+            );
+        }
+
+        return $arr;
     }
 }
