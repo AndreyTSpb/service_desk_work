@@ -64,12 +64,12 @@ class Controller_Order extends Controller
             $data['nameCompany'] = $this->model->nameCompany;
             $data['labelCompany'] = $this->model->labelCompany;
             $data['title']      = "Новая заявка в службу технической поддержки";
-            if($this->model->role == 1){
+            if($this->model->role == 2){
                 
                 $data['view_menu_file'] = 'admin_menu.php';
                 $data['buttons']     = array(
                 );
-            }elseif ($this->model->role == 2){
+            }elseif ($this->model->role == 3){
                 $data['view_menu_file'] = 'super_admin_menu.php';
                 $data['buttons']     = array(
                 );
@@ -85,5 +85,9 @@ class Controller_Order extends Controller
         }
         header('Location: '.DOCUMENT_ROOT);
         exit;
+    }
+
+    public function action_next_user($params){
+        
     }
 }

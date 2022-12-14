@@ -77,10 +77,16 @@ class Model_Order extends Model
         return true;
     }
 
-    public function workOrderForm($orderId)
+    /**
+     * Получение данных по заевке.
+     * @param int $orderId - идентификатор заявки
+     * @param boole $getJob  - если true принимает в работу 
+     */
+    public function workOrderForm($orderId, $getJob = false)
     {
         $data['orderInfo']        = $this->getOrderInfo($orderId);
-        if($data['orderInfo']['status'] == 0) {
+        $job = false;
+        if($data['orderInfo']['status'] == 0 AND $getJob == true) {
             /**
              * Если заявка еще не принята никем, отметить что ее приняли 
              * и сделать запись, что ее приняли
@@ -93,10 +99,18 @@ class Model_Order extends Model
                 Class_Alert_Message::error('Запись не создана');
                 return false;
             }
+            $job = true;
         } 
+        $orderAnswers = $this->getOrderAnswer($orderId);
+        if($orderAnswers){
+            $job = true;
+        }
         $data['userInfo']         = $this->getUserInfo($data['orderInfo']['userId']);
         $data['returnUrl']        = DOCUMENT_ROOT.DS;
         $data['action']           = DOCUMENT_ROOT;
+        $data['job']              = $job;
+        $data['orderAnswers']     = $orderAnswers;
+        $data['userId']           = $this->id_user;
         return Class_Get_Buffer::returnBuffer($data,'forms/work_order.php');
     }
 
@@ -107,6 +121,7 @@ class Model_Order extends Model
          */
         $objUser = new Model_Users(['where'=>'id = '.$userId]);
         $objUser->fetchOne();
+        
         $data['userName']         = $objUser->name;
         $data['userEmail']        = $objUser->email;
         $data['userPhone']        = $objUser->phone;
@@ -118,6 +133,7 @@ class Model_Order extends Model
         $obj = new Model_Orders(['where'=>'id = '.(int)$orderId]);
         if(!$obj->fetchOne()) return false;
         return array(
+            'orderId'           => $orderId, 
             'userId'            => $obj->users_id,
             'pcName'            => $obj->name_comp,
             'klass_truble_id'   => Class_Get_Name_Klass_Truble::name($obj->klass_truble_id),
@@ -144,5 +160,25 @@ class Model_Order extends Model
         $obj->users_id = $this->id_user;
         if(!$obj->save()) return false;
         return true;
+    }
+
+    /**
+     * Получаем все решения по заявке
+     * @param int $orderId - айди заявки
+     */
+    private function getOrderAnswer(int $orderId){
+        $obj = new Model_Order_Answers(['where'=>'orders_id = '.(int)$orderId, 'order'=>'dt ASC']);
+        if(!$obj->num_row) return false;
+        $rows = $obj->getAllRows();
+        $arr = array();
+        foreach($rows AS $row){
+            $arr[$row['id']] = array(
+                'userId'    => $row['users_id'],
+                'userName'  => Class_Get_Name_User::shortName($row['users_id']),
+                'dt'        => $row['dt'],
+                'text'      => $row['text']
+            );
+        }
+        return $arr;
     }
 }

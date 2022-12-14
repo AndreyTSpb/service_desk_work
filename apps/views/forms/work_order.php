@@ -109,32 +109,57 @@
             </div>
 
             <hr class="my-4">
-
-            <h4 class="mb-3">Предложенное решение</h4>
-
-            <div class="row gy-3">
-                <div class="col-12">
-                    <label for="answer" class="form-label">Ответ</label>
-                    <textarea class="form-control" id="answer" name="answer" rows="6" required></textarea>
-                    <small class="text-muted">Описание заявки</small>
-                    <div class="invalid-feedback">
-                        Требуется указать описание проблемы
-                    </div>
-                </div>
-            </div>
+            <?php if($job):?>
+                <h4 class="mb-3">Предложенное решение</h4>
+                <?php if(!empty($orderAnswers)):?>
+                    <?php foreach($orderAnswers AS $orderAnswerId=>$item):?>
+                        <?php if($item['userId'] != $userId):?>
+                            <div class="row gy-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <?=$item['userName'];?>
+                                        </div>
+                                        <div class="card-body">
+                                            <blockquote class="blockquote mb-0">
+                                            <p><?=$item['text'];?></p>
+                                            <footer class="blockquote-footer"><?=$item['dt'];?></footer>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else:?>
+                            <div class="row gy-3">
+                                <input type="hidden" name="idOrder" value="<?=$orderInfo['orderId'];?>">
+                                <div class="col-12">
+                                    <label for="answer" class="form-label">Ответ</label>
+                                    <textarea class="form-control" id="answer" name="answer" rows="6" required><?=$item['text'];?></textarea>
+                                    <small class="text-muted">Описание заявки</small>
+                                    <div class="invalid-feedback">
+                                        Требуется указать описание проблемы
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                <?php endif;?>
+            <?php endif;?>
 
             <hr class="my-4">
             
             <div class="row gy-3 mb-1">
+                <?php if($job): ?>
                 <div class="col-sm-4">
-                    <a href="/admin_dashboard.html" class="w-100 btn btn-primary btn-lg">Завершить заявку</a>
+                    <a href="<?=$action?>/order/close" class="w-100 btn btn-primary btn-lg">Завершить заявку</a>
                 </div>
                 <div class="col-sm-4">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-success btn-lg w-100" data-bs-toggle="modal" data-bs-target="#nextUser">
+                    <button type="button" id="btnNextUser" class="btn btn-outline-success btn-lg w-100" data-bs-toggle="modal" data-bs-target="#nextUser">
                         Передать заявку
                     </button>
                 </div>
+                <?php endif;?>
                 <div class="col-sm-4">
                     <a href="/admin_dashboard.html" class="w-100 btn btn-secondary btn-lg">Закрыть</a>
                 </div>
@@ -143,3 +168,46 @@
         </form>
     </div>
 </div>
+<!-- Модальное окно для выбора пользователя техподдержки-->
+<div class="modal fade" id="nextUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Перевод заявки</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formNexUser" action="<?=$action?>/order/next_user" method="post">
+                <input type="hidden" name="idOrder" value="<?=$orderInfo['orderId'];?>">
+                <div class="mb-3">
+                    <label for="selectUser" class="form-label">Выбрать сотрудника тех.поддержки</label>
+                    
+                    <select id = "selectUser" name = "selectUser" class="form-select" aria-label="Default select example">
+                        <?php $selectUser = new Model_Users(['where'=>'roles_id > 1 AND del = 0']);
+                            if(!$selectUser->num_row):?>    
+                                <option selected>No users</option>
+                            <?php else:?>
+                            <?php $rows = $selectUser->getAllRows(); foreach($rows as $row):?>
+                                <option value="<?=$row['id'];?>"><?=$row['name'];?></option>
+                            <?php endforeach;?>
+                        <?php endif?>
+                    </select>
+
+                </div>
+                <dib class="mb-3">
+                    <label for="answerNextUser" class="form-label">Ответ</label>
+                    <textarea class="form-control" id="answerNextUser" name="answer" rows="6" required></textarea>
+                    <small class="text-muted">Примечание</small>
+                    <div class="invalid-feedback">
+                        Требуется указать описание проблемы
+                    </div>
+                </dib>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button form="formNexUser" type="submit" class="btn btn-primary">Сохранить</button>
+            </div>
+          </div>
+        </div>
+      </div>

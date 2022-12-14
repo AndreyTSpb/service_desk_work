@@ -181,8 +181,20 @@
                 } 
             }
         });
-
     }
 
+    let btnNextUser = document.querySelector('#btnNextUser');
+    if(btnNextUser != null){
+        btnNextUser.addEventListener('click', ()=>{
+            let answer = document.querySelector('#answer');
+            if(answer != null){
+                if(answer.value != null){
+                    console.log(answer.value);
+                    let answerNextUser = document.querySelector('#answerNextUser');
+                    answerNextUser.value = answer.value;
+                }
+            }
+        });
+    }
 
 })();

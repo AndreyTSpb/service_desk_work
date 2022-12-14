@@ -127,8 +127,8 @@ class Model_Main extends Model
             'Тип',
             'Описание',
             'Ответственный',
-            'Дата создания',
-            'Дата завершения',
+            'Создана',
+            'Закрыта',
             'Статус'
         );
         $body = $this->get_body_all_users_order();
@@ -141,7 +141,7 @@ class Model_Main extends Model
      */
     function get_body_all_users_order($id_admin = false){
         $obj = new Model_Orders(
-            ['where' => 'users_id = '.(int)$this->id_user,
+            ['where' => 'status < 2',
                 "order" => 'dt DESC'
             ]);
         if(!$obj->num_row){
@@ -173,18 +173,35 @@ class Model_Main extends Model
          *  table-warning - новая но не назначен ответственный и прошло 20 минут
          */
         foreach ($rows as $row){
+            switch($row['status']){
+                case 0:
+                    $linkOrder = DOCUMENT_ROOT.DS.'order/work_order?id='.$row['id'];
+                    $appOrderBtn = '<a href= "'.$linkOrder.'">Принять</a>';
+                    $status = "Открыта";
+                    break;
+                case 1:
+                    $linkOrder = DOCUMENT_ROOT.DS.'order/work_order?id='.$row['id'];
+                    $appOrderBtn = '<a href= "'.$linkOrder.'">Редактировать</a>';
+                    $status = "В работе";
+                    break;
+                case 2:
+                    $linkOrder = DOCUMENT_ROOT.DS.'/view_order?id='.$row['id'];
+                    $appOrderBtn = $appOrderBtn = '<a href= "'.$linkOrder.'">Просмотреть</a>';
+                    $status = "Закрыта";
+                    break;
+            }
 
             $arr[$row['id']]['class_tr'] = $this->statusOrder($row['status'], $row['dt']);
             $arr[$row['id']]['tds'] = array(
                 $row['id'],
-                'Пользователь',
-                'Класс',
-                'Тип',
-                'Описание',
+                Class_Get_Name_User::shortName($row['users_id']),
+                Class_Get_Name_Klass_Truble::name($row['klass_truble_id']),
+                Class_Get_Name_Type_Truble::name($row['type_truble_id']),
+                '<a href="'.$linkOrder.'">'.mb_substr($row['text'], 0, 50).'...'.'</a>',
                 'Ответственный',
-                'Дата создания',
-                'Дата завершения',
-                'Статус'
+                $row['dt'],
+                $row['dt_ext'],
+                "<span style='white-space: nowrap;'>".$status."</span>"
             );
         }
 
@@ -201,17 +218,20 @@ class Model_Main extends Model
         switch ($status){
             case 0:
                 $now = time();
-                if(strtotime($dt) < $now+20*60){
-                    $status = 'table-light';
+                if(strtotime($dt)+20*60 < $now){
+                    $status = 'table-danger';
                 }else{
-                    $status = 'table-warning';
+                    $status = 'table-light';
                 }
                 break;
             case 1:
                 $now = time();
-                if(strtotime($dt) < $now+60*60){
+                if(strtotime($dt)+60*60 > $now){
                     $status = 'table-primary';
-                }else{
+                }elseif(strtotime($dt)+2*60*60 > $now AND strtotime($dt)+ 60*60 < $now){
+                    $status = 'table-warning';
+                }
+                else{
                     $status = 'table-danger';
                 }
                 break;

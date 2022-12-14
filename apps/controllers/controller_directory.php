@@ -8,11 +8,12 @@ class Controller_Directory extends Controller
         parent::__construct();
         $this->model = new Model_Directory();
         $this->model->url = 'directory';
+        $this->model->role = $this->role;
     }
 
     public function action_index()
     {
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             $data['nameCompany']    = $this->model->nameCompany;
             $data['labelCompany']   = $this->model->labelCompany;
             $data['title']          = "Пользователи";
@@ -33,7 +34,7 @@ class Controller_Directory extends Controller
     }
 
     public function action_new_user(){
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             //var_dump($_POST);
             //exit;
             /**
@@ -77,7 +78,7 @@ class Controller_Directory extends Controller
     }
 
     public function action_edit_user($params){
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             if(isset($_POST['save'])){
                 $params['id'] = $_POST['id'];
                 if($this->model->updateUser($_POST)){
@@ -115,7 +116,7 @@ class Controller_Directory extends Controller
 
     public function action_klass()
     {
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             $data['nameCompany']    = $this->model->nameCompany;
             $data['labelCompany']   = $this->model->labelCompany;
             $data['title']          = "Справочник классов проблем";
@@ -147,7 +148,7 @@ class Controller_Directory extends Controller
     }
 
     public function action_new_klass_truble(){
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             if(!isset($_POST['save'])){
                 header('Location: '.DOCUMENT_ROOT.DS.$this->model->url.'/klass');
                 exit();
@@ -167,7 +168,7 @@ class Controller_Directory extends Controller
     }
 
     public function action_edit_klass_truble(){
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             if(!isset($_POST['save'])){
                 header('Location: '.DOCUMENT_ROOT.DS.$this->model->url.'/klass');
                 exit();
@@ -188,7 +189,7 @@ class Controller_Directory extends Controller
 
     public function action_type()
     {
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             $data['nameCompany']    = $this->model->nameCompany;
             $data['labelCompany']   = $this->model->labelCompany;
             $data['title']          = "Справочник типов проблем";
@@ -220,7 +221,7 @@ class Controller_Directory extends Controller
     }
 
     public function action_new_type_truble(){
-        if($this->model->role == 2){
+        if($this->model->role == 3){
             if(!isset($_POST['save'])){
                 header('Location: '.DOCUMENT_ROOT.DS.$this->model->url.'/type');
                 exit();
